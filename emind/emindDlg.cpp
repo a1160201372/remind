@@ -101,11 +101,6 @@ HCURSOR CemindDlg::OnQueryDragIcon()
 void CemindDlg::menu_set()
 {
 	// TODO: 在此添加命令处理程序代码
-
-	
-
 	TAB_population* pDlg = new TAB_population;//显示窗口
-		pDlg->Create(IDD_TAB_population);
-		pDlg->ShowWindow(SW_SHOW);
-	
+	pDlg->DoModal();//运行设置窗口，并锁定本窗口。
 }

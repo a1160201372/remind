@@ -3,12 +3,17 @@
 
 #include "pch.h"
 #include "emind.h"
-#include "TAB_population.h"
+
 #include "afxdialogex.h"
 #include "tab_mysql.h"
 #include"query.h"
+#include "TAB_population.h"
+#include"tab_routine.h"
+
 tab_mysql user_tab_mysql;//
 tab_query user_tab_query;
+tab_routine user_tab_routine;
+
 // TAB_population 对话框
 
 
@@ -35,11 +40,13 @@ BOOL TAB_population::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 	//打开设置界面
 
-	m_tab.InsertItem(0, _T("测试1"));
-	m_tab.InsertItem(1, _T("测试2"));
+	m_tab.InsertItem(0, _T("MYSQL属性"));
+	m_tab.InsertItem(1, _T("查询属性"));
+	m_tab.InsertItem(2, _T("常规"));
 	//创建两个对话框
 	user_tab_mysql.Create(IDD_TAB_MYSQL, &m_tab);
 	user_tab_query.Create(IDD_TAB_query, &m_tab);
+	user_tab_routine.Create(IDD_TAB_routine, &m_tab);
 	//设定在Tab内显示的范围
 	CRect tabRect;
 	m_tab.GetClientRect(tabRect);
@@ -49,9 +56,11 @@ BOOL TAB_population::OnInitDialog()
 	tabRect.bottom += 100;
 	user_tab_mysql.MoveWindow(&tabRect);
 	user_tab_query.MoveWindow(&tabRect);
+	user_tab_routine.MoveWindow(&tabRect);
 
 	user_tab_mysql.ShowWindow(SW_SHOW);
 	user_tab_query.ShowWindow(SW_HIDE);
+	user_tab_routine.ShowWindow(SW_HIDE);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -85,10 +94,17 @@ void TAB_population::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 	case 0:
 		user_tab_mysql.ShowWindow(SW_SHOW);
 		user_tab_query.ShowWindow(SW_HIDE);
+		user_tab_routine.ShowWindow(SW_HIDE);
 		break;
 	case 1:
 		user_tab_mysql.ShowWindow(SW_HIDE);
 		user_tab_query.ShowWindow(SW_SHOW);
+		user_tab_routine.ShowWindow(SW_HIDE);
+		break;
+	case 2:
+		user_tab_mysql.ShowWindow(SW_HIDE);
+		user_tab_query.ShowWindow(SW_HIDE);
+		user_tab_routine.ShowWindow(SW_SHOW);
 		break;
 	default:break;
 	}
