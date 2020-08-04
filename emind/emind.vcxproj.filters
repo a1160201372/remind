@@ -33,6 +33,15 @@
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="TAB_population.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="query.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tab_mysql.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="emind.cpp">
@@ -42,6 +51,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="TAB_population.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="query.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tab_mysql.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

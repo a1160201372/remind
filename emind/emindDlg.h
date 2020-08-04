@@ -11,7 +11,7 @@ class CemindDlg : public CDialogEx
 // 构造
 public:
 	CemindDlg(CWnd* pParent = nullptr);	// 标准构造函数
-	CMenu m_Menu;
+	
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_EMIND_DIALOG };
@@ -24,7 +24,7 @@ public:
 // 实现
 protected:
 	HICON m_hIcon;
-
+	CMenu m_Menu;
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPaint();

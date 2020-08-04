@@ -5,13 +5,15 @@
 #include "pch.h"
 #include "framework.h"
 #include "emind.h"
+#include "tab_mysql.h"
+#include "TAB_population.h"
+#include"query.h"
 #include "emindDlg.h"
 #include "afxdialogex.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
 
 // CemindDlg 对话框
 
@@ -50,6 +52,10 @@ BOOL CemindDlg::OnInitDialog()
 	//设置菜单项
 	m_Menu.LoadMenu(IDR_MENU1);  //  IDR_MENU1
 	SetMenu(&m_Menu);
+
+
+
+
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -96,6 +102,10 @@ void CemindDlg::menu_set()
 {
 	// TODO: 在此添加命令处理程序代码
 
-	//打开设置界面
+	
 
+	TAB_population* pDlg = new TAB_population;//显示窗口
+		pDlg->Create(IDD_TAB_population);
+		pDlg->ShowWindow(SW_SHOW);
+	
 }
