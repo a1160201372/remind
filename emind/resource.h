@@ -31,7 +31,6 @@
 #define IDC_TAB_M_user                  1036
 #define IDC_TAB_M_pws                   1037
 #define IDC_TAB_Q_time_table            1038
-#define IDC_TAB_M_ip2                   1038
 #define IDC_TAB_M_base                  1038
 #define IDC_TAB_Q_ip_table              1039
 #define ID_32771                        32771
