@@ -61,6 +61,7 @@ BOOL TAB_population::OnInitDialog()
 	user_tab_mysql.ShowWindow(SW_SHOW);
 	user_tab_query.ShowWindow(SW_HIDE);
 	user_tab_routine.ShowWindow(SW_HIDE);
+	user_tab_mysql.init();//初始化mysql界面
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -88,23 +89,25 @@ void TAB_population::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	// TODO: 在此添加控件通知处理程序代码
 	*pResult = 0;
-
 	switch (m_tab.GetCurSel())//处理TAB界面
 	{
 	case 0:
 		user_tab_mysql.ShowWindow(SW_SHOW);
 		user_tab_query.ShowWindow(SW_HIDE);
 		user_tab_routine.ShowWindow(SW_HIDE);
+		user_tab_mysql.init();//初始化mysql界面
 		break;
 	case 1:
 		user_tab_mysql.ShowWindow(SW_HIDE);
 		user_tab_query.ShowWindow(SW_SHOW);
 		user_tab_routine.ShowWindow(SW_HIDE);
+		user_tab_query.init();//初始化查询界面
 		break;
 	case 2:
 		user_tab_mysql.ShowWindow(SW_HIDE);
 		user_tab_query.ShowWindow(SW_HIDE);
 		user_tab_routine.ShowWindow(SW_SHOW);
+		user_tab_routine.init();//初始化常规界面
 		break;
 	default:break;
 	}

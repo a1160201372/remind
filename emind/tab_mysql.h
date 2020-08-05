@@ -10,6 +10,7 @@ class tab_mysql : public CDialogEx
 public:
 	tab_mysql(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~tab_mysql();
+	void init();
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
@@ -21,3 +22,5 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 };
+
+

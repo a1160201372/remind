@@ -32,3 +32,14 @@ END_MESSAGE_MAP()
 
 
 // tab_mysql 消息处理程序
+void tab_mysql::init()
+{
+	//设置按钮状态
+	((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(1);
+	//((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(0);
+	SetDlgItemText(IDC_TAB_M_ip, _T("请输入帐号1"));
+	SetDlgItemText(IDC_TAB_M_prot, _T("请输入帐号2"));
+	SetDlgItemText(IDC_TAB_M_user, _T("请输入帐号3"));
+	SetDlgItemText(IDC_TAB_M_pws, _T("请输入帐号4"));
+
+}

@@ -9,6 +9,7 @@ class tab_routine : public CDialogEx
 
 public:
 	tab_routine(CWnd* pParent = nullptr);   // 标准构造函数
+	void init();
 	virtual ~tab_routine();
 
 // 对话框数据
@@ -20,4 +21,7 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 支持
 
 	DECLARE_MESSAGE_MAP()
+public:
+	CButton Check_Power;
+	afx_msg void OnBnClickedCheck2();
 };

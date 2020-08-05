@@ -10,6 +10,7 @@ class tab_query : public CDialogEx
 public:
 	tab_query(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~tab_query();
+	void init();
 
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
