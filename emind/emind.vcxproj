@@ -189,6 +189,7 @@
     <ClInclude Include="emind.h" />
     <ClInclude Include="emindDlg.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="mysqlDlg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="query.h" />
     <ClInclude Include="Resource.h" />
@@ -200,6 +201,7 @@
   <ItemGroup>
     <ClCompile Include="emind.cpp" />
     <ClCompile Include="emindDlg.cpp" />
+    <ClCompile Include="mysqlDlg.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

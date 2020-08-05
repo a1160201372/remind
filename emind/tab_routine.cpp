@@ -36,27 +36,33 @@ END_MESSAGE_MAP()
 // tab_routine 消息处理程序
 void tab_routine::init()
 {
+	//定义
+	int day, interval_time, set_Boot;
 
+	TCHAR day_t[10];
+	char day_c[10];
 
+	TCHAR interval_time_t[10];
+	char interval_time_c[10];
+
+	day = GetPrivateProfileInt(_T("set"), _T("day"), 0, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	interval_time = GetPrivateProfileInt(_T("set"), _T("interval_time"), 0, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	set_Boot = GetPrivateProfileInt(_T("set"), _T("set_Boot"), 0, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	//转换格式
+	sprintf_s(day_c, 10, "%d", day);
+	MultiByteToWideChar(CP_ACP, 0, day_c, -1, day_t, 10);//转换格式
+	sprintf_s(interval_time_c, 10, "%d", interval_time);
+	MultiByteToWideChar(CP_ACP, 0, interval_time_c, -1, interval_time_t, 10);//转换格式
 
 	//设置按钮状态
-	((CButton*)GetDlgItem(IDC_CHECK2))->SetCheck(1);
-	//((CButton*)GetDlgItem(IDC_CHECK2))->SetCheck(0);
-	SetDlgItemText(IDC_TAB_R_day, _T("请输入帐号1"));
-	SetDlgItemText(IDC_TAB_R_minute, _T("请输入帐号2"));
-	//SetDlgItemText(IDC_CHECK2, _T("0"));
-	/*UpdateData();
-	if (BST_CHECKED == IsDlgButtonChecked(IDC_CHECK2))
-	{
-		SetDlgItemText(IDC_TAB_R_day, _T("xuan1"));
-		SetDlgItemText(IDC_TAB_R_minute, _T("xuan2"));
-	}
-	else
-	{
-		SetDlgItemText(IDC_TAB_R_day, _T("weiuan1"));
-		SetDlgItemText(IDC_TAB_R_minute, _T("weixuan2"));
-	}
-	*/
+	if (set_Boot == 0)//打勾
+		((CButton*)GetDlgItem(IDC_CHECK2))->SetCheck(0);
+	else//不打勾
+		((CButton*)GetDlgItem(IDC_CHECK2))->SetCheck(1);
+
+
+	SetDlgItemText(IDC_TAB_R_day, day_t);
+	SetDlgItemText(IDC_TAB_R_minute, interval_time_t);
 	
 }
 
