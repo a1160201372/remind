@@ -11,5 +11,6 @@
 
 // 添加要在此处预编译的标头
 #include "framework.h"
-
+#define WM_SHOWTASK (WM_USER+300) //注意n换成数字，n的大小应大于100
+int DisplayResourceNAMessageBox(LPCWSTR text, LPCWSTR title);
 #endif //PCH_H

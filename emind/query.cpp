@@ -98,3 +98,6 @@ void tab_query::OnBnClickedButton2()
 
 
 }
+
+void tab_query::OnOK()
+{}

@@ -92,3 +92,7 @@ void tab_mysql::OnBnClickedButton1()
 	//将私人变量，存储到配置文件
 	mysql_data.SaveMysql(flag_pws);
 }
+
+void tab_mysql::OnOK()
+{ //里面什么也不写
+}

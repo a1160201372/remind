@@ -11,7 +11,7 @@ public:
 	tab_mysql(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~tab_mysql();
 	void init();
-
+	void OnOK();
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_TAB_MYSQL };

@@ -11,7 +11,7 @@ public:
 	tab_routine(CWnd* pParent = nullptr);   // 标准构造函数
 	void init();
 	virtual ~tab_routine();
-
+	void OnOK();
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_TAB_routine };

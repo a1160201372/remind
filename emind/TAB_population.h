@@ -10,7 +10,7 @@ class TAB_population : public CDialogEx
 public:
 	TAB_population(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~TAB_population();
-
+	void OnOK();
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_TAB_population };

@@ -112,3 +112,5 @@ void TAB_population::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 	default:break;
 	}
 }
+void TAB_population::OnOK()
+{}

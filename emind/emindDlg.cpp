@@ -14,11 +14,9 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
-
+NOTIFYICONDATA m_nid;
 // CemindDlg 对话框
-
-
-
+bool set_win_flag;
 CemindDlg::CemindDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_EMIND_DIALOG, pParent)
 {
@@ -33,6 +31,7 @@ void CemindDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CemindDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_MESSAGE(WM_SHOWTASK, OnShowTask)//托盘响应
 	ON_COMMAND(ID_32771, &CemindDlg::menu_set)
 END_MESSAGE_MAP()
 
@@ -52,8 +51,15 @@ BOOL CemindDlg::OnInitDialog()
 	//设置菜单项
 	m_Menu.LoadMenu(IDR_MENU1);  //  IDR_MENU1
 	SetMenu(&m_Menu);
-
-
+	//增加系统托盘
+	m_nid.cbSize = (DWORD)sizeof(NOTIFYICONDATA);
+	m_nid.hWnd = this->m_hWnd;
+	m_nid.uID = IDR_MAINFRAME;
+	m_nid.uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP;
+	m_nid.uCallbackMessage = WM_SHOWTASK;             // 自定义的消息名称
+	m_nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
+	wcscpy_s(m_nid.szTip, _T("提醒服务"));//信息提示条为"计划任务提醒"                // 信息提示条为"服务器程序"，VS2008 UNICODE编码用wcscpy_s()函数
+	Shell_NotifyIcon(NIM_ADD, &m_nid);                // 在托盘区添加图标
 
 
 
@@ -103,4 +109,74 @@ void CemindDlg::menu_set()
 	// TODO: 在此添加命令处理程序代码
 	TAB_population* pDlg = new TAB_population;//显示窗口
 	pDlg->DoModal();//运行设置窗口，并锁定本窗口。
+}
+
+LRESULT CemindDlg::OnShowTask(WPARAM wParam, LPARAM lParam)
+{
+	if (wParam != IDR_MAINFRAME)
+		return 1;
+	switch (lParam)
+	{
+		case WM_RBUTTONUP:                                        // 右键起来时弹出菜单
+		{
+			int id;//定义菜单标志
+			CMenu menu, * pMenu;
+			menu.LoadMenu(IDR_MENU2);
+			pMenu = menu.GetSubMenu(0);
+			POINT ptPos;
+			::GetCursorPos(&ptPos);
+			pMenu->SetDefaultItem(IDR_MENU2);
+			SetForegroundWindow();//这一行代码很重要，否则右键菜单工作//不正常。详见msdn说明: http://support.microsoft.com/kb/135788
+			id = menu.GetSubMenu(0)->TrackPopupMenu(TPM_RETURNCMD | TPM_LEFTALIGN | TPM_RIGHTBUTTON, ptPos.x, ptPos.y, this);
+
+			switch (id) {
+				case 32775://设置
+				{
+					if (set_win_flag == 0)
+					{
+						CWnd* set_win = FindWindow(NULL, _T("设置"));//获取设置窗口的句柄
+						//判断设置窗口是否打开
+						if (set_win == NULL)//未打开
+						{
+							TAB_population* pDlg = new TAB_population;//显示窗口
+							pDlg->DoModal();//运行设置窗口，并锁定本窗口。
+						}
+					}
+					break;
+				}
+				case 32776://意见反馈
+				{
+				
+					break;
+				}
+				case 32777://关于提醒
+				{
+					break;
+				}
+				case 32778://退出程序
+				{
+					int a=DisplayResourceNAMessageBox(_T("提醒软件"), _T("您确认退出软件吗？"));
+					switch (a)
+					{
+						case IDOK://确定
+						{
+							exit(0);//退出程序
+							break;
+						}
+						case IDCANCEL: {//取消
+							break;//没动作
+						}
+					}
+					break;
+				}
+			}
+			break;
+		}
+		case WM_LBUTTONDBLCLK:                                 // 双击左键的处理
+		{
+			this->ShowWindow(SW_SHOWNORMAL);         // 显示主窗口
+			break;
+		}
+	}
+	return 0;
 }

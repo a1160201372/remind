@@ -11,7 +11,7 @@ public:
 	tab_query(CWnd* pParent = nullptr);   // 标准构造函数
 	virtual ~tab_query();
 	void init();
-
+	void OnOK();
 // 对话框数据
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_TAB_query };

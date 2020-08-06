@@ -97,3 +97,7 @@ void tab_routine::OnBnClickedButton1()
 	//mysql_data.FreeRoutine();
 
 }
+
+void tab_routine::OnOK()
+{ //里面什么也不写
+}
