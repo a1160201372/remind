@@ -24,4 +24,5 @@ protected:
 public:
 	CButton Check_Power;
 	afx_msg void OnBnClickedCheck2();
+	afx_msg void OnBnClickedButton1();
 };

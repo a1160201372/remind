@@ -5,8 +5,9 @@
 #include "emind.h"
 #include "query.h"
 #include "afxdialogex.h"
-#include "afxdialogex.h"
+#include "mysqlDlg.h"
 
+extern mysqlDlg mysql_data;
 
 // query 对话框
 
@@ -29,6 +30,7 @@ void tab_query::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(tab_query, CDialogEx)
+	ON_BN_CLICKED(IDC_BUTTON2, &tab_query::OnBnClickedButton2)
 END_MESSAGE_MAP()
 
 
@@ -37,59 +39,62 @@ END_MESSAGE_MAP()
 //初始化函数
 void tab_query::init()
 {
-	//定义变量
-	LPWSTR time_table, time_end, time_ipid, time_userid;
-	LPWSTR ip_table, ip_ip, ip_id;
-	LPWSTR user_table, user_name, user_id;
-	//分配空间
-	time_table = new wchar_t[10];
-	time_end = new wchar_t[10];
-	time_ipid = new wchar_t[10];
-	time_userid = new wchar_t[10];
+	mysql_data.GetQuery();//读到公共
 
-	ip_table = new wchar_t[10];
-	ip_ip = new wchar_t[10];
-	ip_id = new wchar_t[10];
+	SetDlgItemText(IDC_TAB_Q_time_table, mysql_data.time_table);
+	SetDlgItemText(IDC_TAB_Q_time_end, mysql_data.time_end);
+	SetDlgItemText(IDC_TAB_Q_time_ipid, mysql_data.time_ipid);
+	SetDlgItemText(IDC_TAB_Q_time_userid, mysql_data.time_userid);
+	SetDlgItemText(IDC_TAB_Q_ip_table, mysql_data.ip_table);
+	SetDlgItemText(IDC_TAB_Q_ip_ip, mysql_data.ip_ip);
+	SetDlgItemText(IDC_TAB_Q_ip_id, mysql_data.ip_id);
+	SetDlgItemText(IDC_TAB_Q_user_table, mysql_data.user_table);
+	SetDlgItemText(IDC_TAB_Q_user_name1, mysql_data.user_name);
+	SetDlgItemText(IDC_TAB_Q_user_id1, mysql_data.user_id);
 
-	user_table = new wchar_t[10];
-	user_name = new wchar_t[10];
-	user_id = new wchar_t[10];
-	//读取配置文件
-	GetPrivateProfileString(_T("TIME"), _T("time_table"), _T("error"), time_table, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("TIME"), _T("time_end"), _T("error"), time_end, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("TIME"), _T("time_ipid"), _T("error"), time_ipid, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("TIME"), _T("time_userid"), _T("error"), time_userid, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+}
 
-	GetPrivateProfileString(_T("IP"), _T("ip_table"), _T("error"), ip_table, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("IP"), _T("ip_ip"), _T("error"), ip_ip, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("IP"), _T("ip_id"), _T("error"), ip_id, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+void tab_query::OnBnClickedButton2()
+{
+	// TODO: 在此添加控件通知处理程序代码
 
-	GetPrivateProfileString(_T("USERS"), _T("user_table"), _T("error"), user_table, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("USERS"), _T("user_name"), _T("error"), user_name, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("USERS"), _T("user_id"), _T("error"), user_id, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	//定义需要变量
+	CString time_table, time_end, time_ipid, time_userid;
+	CString ip_table, ip_ip, ip_id;
+	CString user_table, user_name, user_id;
+	bool flag_pws = 0;
+	//获取表格内容
+	GetDlgItem(IDC_TAB_Q_time_table)->GetWindowText(time_table);
+	mysql_data.time_table = (LPWSTR)(LPCWSTR)time_table;
+	GetDlgItem(IDC_TAB_Q_time_end)->GetWindowText(time_end);
+	mysql_data.time_end = (LPWSTR)(LPCWSTR)time_end;
+	GetDlgItem(IDC_TAB_Q_time_ipid)->GetWindowText(time_ipid);
+	mysql_data.time_ipid = (LPWSTR)(LPCWSTR)time_ipid;
+	GetDlgItem(IDC_TAB_Q_time_userid)->GetWindowText(time_userid);
+	mysql_data.time_userid = (LPWSTR)(LPCWSTR)time_userid;
+
+	GetDlgItem(IDC_TAB_Q_ip_table)->GetWindowText(ip_table);
+	mysql_data.ip_table = (LPWSTR)(LPCWSTR)ip_table;
+	GetDlgItem(IDC_TAB_Q_ip_ip)->GetWindowText(ip_ip);
+	mysql_data.ip_ip = (LPWSTR)(LPCWSTR)ip_ip;
+	GetDlgItem(IDC_TAB_Q_ip_id)->GetWindowText(ip_id);
+	mysql_data.ip_id = (LPWSTR)(LPCWSTR)ip_id;
+
+	GetDlgItem(IDC_TAB_Q_user_table)->GetWindowText(user_table);
+	mysql_data.user_table = (LPWSTR)(LPCWSTR)user_table;
+	GetDlgItem(IDC_TAB_Q_user_name1)->GetWindowText(user_name);
+	mysql_data.user_name = (LPWSTR)(LPCWSTR)user_name;
+	GetDlgItem(IDC_TAB_Q_user_id1)->GetWindowText(user_id);
+	mysql_data.user_id = (LPWSTR)(LPCWSTR)user_id;
+	//
+	//检测是否有空的
 
 
-	SetDlgItemText(IDC_TAB_Q_time_table, time_table);
-	SetDlgItemText(IDC_TAB_Q_time_end, time_end);
-	SetDlgItemText(IDC_TAB_Q_time_ipid, time_ipid);
-	SetDlgItemText(IDC_TAB_Q_time_userid, time_userid);
-	SetDlgItemText(IDC_TAB_Q_ip_table, ip_table);
-	SetDlgItemText(IDC_TAB_Q_ip_ip, ip_ip);
-	SetDlgItemText(IDC_TAB_Q_ip_id, ip_id);
-	SetDlgItemText(IDC_TAB_Q_user_table, user_table);
-	SetDlgItemText(IDC_TAB_Q_user_name, user_name);
-	SetDlgItemText(IDC_TAB_Q_user_id, user_id);
-	//释放空间
-	delete[] time_table;
-	delete[] time_end;
-	delete[] time_ipid;
-	delete[] time_userid;
+	//传到私人变量
+	mysql_data.SetQuery();
 
-	delete[] ip_table;
-	delete[] ip_ip;
-	delete[] ip_id;
+	//将私人，存储到配置文件
+	mysql_data.SaveQuery(); 
 
-	delete[] user_table;
-	delete[] user_name;
-	delete[] user_id;
+
 }

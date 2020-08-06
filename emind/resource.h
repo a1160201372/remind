@@ -23,7 +23,9 @@
 #define IDC_TAB_Q_ip_ip                 1024
 #define IDC_TAB_Q_ip_id                 1025
 #define IDC_TAB_Q_user_id               1026
+#define IDC_TAB_Q_user_name1            1026
 #define IDC_TAB_Q_user_name             1027
+#define IDC_TAB_Q_user_id1              1027
 #define IDC_BUTTON3                     1028
 #define IDC_CHECK2                      1033
 #define IDC_TAB_M_ip                    1034
