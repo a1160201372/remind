@@ -26,9 +26,16 @@ class mysqlDlg
 
 		void init();
 		//连接数据库
-		bool ConnectDatabase(char host[], char user[], char psw[], char table[], int port,char* error[]);
-		//
-		//
+		bool ConnectDatabase(LPWSTR host, LPWSTR user, LPWSTR psw, LPWSTR table, LPWSTR port);
+		//查询数据
+		bool QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
+			LPWSTR key_time_tmp, LPWSTR key_time_ipid_tmp, LPWSTR key_time_nameid_tmp,
+			LPWSTR table_ip_tmp, LPWSTR key_ipid_tmp, LPWSTR key_ip_tmp,
+			LPWSTR table_user_tmp, LPWSTR key_nameid_tmp, LPWSTR key_name_tmp
+		);
+		char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_tmp, char* id_tmp);
+
+			//
 		//公开
 		//Mysql
 		LPWSTR	HostName;	//

@@ -11,6 +11,12 @@
 
 // 添加要在此处预编译的标头
 #include "framework.h"
+#include "mysqlDlg.h"
 #define WM_SHOWTASK (WM_USER+300) //注意n换成数字，n的大小应大于100
 int DisplayResourceNAMessageBox(LPCWSTR text, LPCWSTR title);
+
+extern mysqlDlg mysql_data;
+char* ConvertLPWSTRToLPSTR(LPWSTR lpwszStrIn);
+int DaysBetween2Date(int year1, int month1, int day1, int year2, int month2, int day2);
+int char2int(const char* str);
 #endif //PCH_H

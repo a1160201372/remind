@@ -15,6 +15,8 @@
 #define new DEBUG_NEW
 #endif
 NOTIFYICONDATA m_nid;
+extern TCHAR nid_szInfoTitle[100][100];//存储气泡的显示内容
+
 // CemindDlg 对话框
 bool set_win_flag;
 CemindDlg::CemindDlg(CWnd* pParent /*=nullptr*/)
@@ -60,7 +62,25 @@ BOOL CemindDlg::OnInitDialog()
 	m_nid.hIcon = LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME));
 	wcscpy_s(m_nid.szTip, _T("提醒服务"));//信息提示条为"计划任务提醒"                // 信息提示条为"服务器程序"，VS2008 UNICODE编码用wcscpy_s()函数
 	Shell_NotifyIcon(NIM_ADD, &m_nid);                // 在托盘区添加图标
+	//读取配置文件
+	mysql_data.GetMysql();//读到公共
+	mysql_data.GetQuery();//读到公共
+	//转换格式
+	
+	//连接数据库
+	mysql_data.ConnectDatabase(mysql_data.HostName, mysql_data.UserName, mysql_data.password, mysql_data.databases, mysql_data.Port);
+	//查询数据
+	mysql_data.QueryDatabase2(mysql_data.time_table, mysql_data.day,
+		mysql_data.time_end, mysql_data.time_ipid, mysql_data.time_userid,
+		mysql_data.ip_table, mysql_data.ip_id, mysql_data.ip_ip,
+		mysql_data.user_table, mysql_data.user_id, mysql_data.user_name);
 
+
+	int a;
+	a = 32;
+	a++;
+
+	//if (mysql_data.QueryDatabase2(HostName, day, time_end, time_ipid, time_userid, ip_table, ip_id, ip_ip, user_table, user_id, user_name, LOGPATH1) == true)
 
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE

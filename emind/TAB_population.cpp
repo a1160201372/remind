@@ -13,7 +13,7 @@
 tab_mysql user_tab_mysql;//
 tab_query user_tab_query;
 tab_routine user_tab_routine;
-extern mysqlDlg mysql_data;
+
 // TAB_population 对话框
 
 

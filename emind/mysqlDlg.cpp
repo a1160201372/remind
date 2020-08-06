@@ -1,11 +1,259 @@
 #include"pch.h"
 #include"mysqlDlg.h"
+#include"mysql.h"
 
+#include <stdlib.h>
+#include <tchar.h>
+#pragma comment(lib,"libmysql.lib")
+extern MYSQL mysql; //mysql连接
+extern MYSQL_FIELD* fd;  //字段列数组
+TCHAR nid_szInfoTitle[100][100];//存储气泡的显示内容
+extern MYSQL_RES* res; //这个结构代表返回行的一个查询结果集
+extern MYSQL_ROW column; //一个行数据的类型安全(type-safe)的表示，表示数据行的列
 
-bool mysqlDlg::ConnectDatabase(char host[], char user[], char psw[], char table[], int port, char* error[])
+bool mysqlDlg::ConnectDatabase(LPWSTR host, LPWSTR user, LPWSTR psw, LPWSTR table, LPWSTR port)
 {
-	return 0;
+	//初始化mysql  
+
+	mysql_init(&mysql);  //连接mysql，数据库  
+#if 0
+	host = "localhost";
+	user = "root";
+	psw = "1234";//"maiyun";
+	table = "maiyun";  //数据库的名字
+	port = 3307;
+#endif; 
+	//转换格式
+	char* host_tmp =ConvertLPWSTRToLPSTR(host);
+	char* user_tmp = ConvertLPWSTRToLPSTR(user);
+	char* psw_tmp = ConvertLPWSTRToLPSTR(psw);
+	char* table_tmp = ConvertLPWSTRToLPSTR(table);
+
+	int port_tmp = _ttoi(port);
+	
+	if (!(mysql_real_connect(&mysql, host_tmp, user_tmp, psw_tmp, table_tmp, port_tmp, NULL, 0)))
+		//中间分别是主机，用户名，密码，数据库名，端口号（可以写默认0或者3306等），可以先写成参数再传进去  
+	{
+		TCHAR Name[100];	//定义TCHAR临时变量，
+		//拼接内容
+		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 100);//转换格式
+		DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
+		return false;
+	}
+	else
+	{
+		DisplayResourceNAMessageBox(_T("yes"), _T("yes1"));
+		return true;
+	}
 }
+
+//查询具体数值
+
+char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_tmp, char* id_tmp)
+{
+	//转换格式
+
+	char* table = ConvertLPWSTRToLPSTR(table_tmp);
+	char* key_id = ConvertLPWSTRToLPSTR(key_id_tmp);
+	char* key = ConvertLPWSTRToLPSTR(key_tmp);
+	//char* id = ConvertLPWSTRToLPSTR(id_tmp);
+
+	char query[150]; //查询语句
+	MYSQL_RES* res1; //这个结构代表返回行的一个查询结果集
+	MYSQL_ROW column1; //一个行数据的类型安全(type-safe)的表示，表示数据行的列
+	char* field1[150];  //存字段名二维数组
+	int flag_id = -1, flag_info = -1;
+	char tableName[100];
+	sprintf_s(tableName, 100, "select * from %s", table);
+	strcpy_s(query, tableName);
+	mysql_query(&mysql, "set names gbk");
+	//返回0 查询成功，返回1查询失败  
+
+	if (mysql_query(&mysql, tableName))        //执行SQL语句  
+	{
+		//printf("Query failed (%s)\n", mysql_error(&mysql));
+		TCHAR Name[100];	//定义TCHAR临时变量，
+		//拼接内容
+		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 100);//转换格式
+		DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
+		return "error";
+	}
+	else
+	{
+		//printf("query success\n");
+	}
+	res1 = mysql_store_result(&mysql);
+
+	for (int i = 0; fd = mysql_fetch_field(res1); i++)  //获取字段名  
+	{
+		field1[i] = fd->name;
+		if (strcmp(field1[i], key_id) == 0)//读取信息：ip、用户
+			flag_id = i;
+		if (strcmp(field1[i], key) == 0)//读取信息：ip、用户
+			flag_info = i;
+	}
+	if ((flag_id == -1) || (flag_info == -1))
+		return "error";
+	char* info_tmp = "";
+	int j = mysql_num_fields(res1);  // 获取列数  
+	while (column1 = mysql_fetch_row(res1))
+	{
+		if (strcmp(column1[flag_id], id_tmp) == 0)//id相等
+		{
+			info_tmp = column1[flag_info];
+			return info_tmp;
+		}
+	}
+	return "error";
+}
+
+bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
+	LPWSTR key_time_tmp, LPWSTR key_time_ipid_tmp, LPWSTR key_time_nameid_tmp,
+	LPWSTR table_ip, LPWSTR key_ipid, LPWSTR key_ip,
+	LPWSTR table_user, LPWSTR key_nameid, LPWSTR key_name
+)
+{
+	int flag_num = -1, flag_ip_id = -1, flag_name_id = -1;
+	//定义变量
+	int idnum;
+	char* field[150];  //存字段名二维数组
+	
+	char tmp[100]=" ";		//定义char临时变量，最终字符串//转换临时变量
+	TCHAR Name[100];	//定义TCHAR临时变量，
+	//转换格式
+	char* table1 = ConvertLPWSTRToLPSTR(table1_tmp);
+	char* key_time = ConvertLPWSTRToLPSTR(key_time_tmp);
+	char* key_time_ipid = ConvertLPWSTRToLPSTR(key_time_ipid_tmp);
+	char* key_time_nameid = ConvertLPWSTRToLPSTR(key_time_nameid_tmp);
+
+/*	char* table_ip = ConvertLPWSTRToLPSTR(table_ip_tmp);
+	char* key_ipid = ConvertLPWSTRToLPSTR(key_ipid_tmp);
+	char* key_ip = ConvertLPWSTRToLPSTR(key_ip_tmp);
+
+	char* table_user = ConvertLPWSTRToLPSTR(table_user_tmp);
+	char* key_nameid = ConvertLPWSTRToLPSTR(key_nameid_tmp);
+	char* key_name = ConvertLPWSTRToLPSTR(key_name_tmp);
+	*/
+
+	int day_in = _ttoi(day_in_tmp);
+
+
+	char query[150]; //查询语句
+	//const char* use_ip="local_ip";
+	//const char* use_name="instance_name";
+	//const char* use_time="expire_time";
+#if 0
+	table1 = "yundb_instance";
+	use_time = "expire_time";		//#服务器到期时间键名
+	use_ip = "local_ip";		//	#ip地址键名
+	use_name = "instance_name";
+#endif
+
+	
+	char tableName[100];
+	sprintf_s(tableName, 100, "select * from %s", table1);
+	strcpy_s(query, tableName);
+	mysql_query(&mysql, "set names gbk");
+	//返回0 查询成功，返回1查询失败  
+
+	if (mysql_query(&mysql, tableName))        //执行SQL语句  
+	{//查询失败
+#if 0
+		str = new char[100];
+		//写入日志文件
+		GetLocalTime(&st);//获取时间
+		sprintf_s(str, 100, "%d-%d-%d %02d:%02d tmp: 数据库查询失败", st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute);
+		WriteToLog(str, path);
+		delete[] str;
+#endif
+		TCHAR Name[200];	//定义TCHAR临时变量，
+		//拼接内容
+		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 200);//转换格式
+		DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
+		return false;
+	}
+	else
+	{
+		//printf("query success\n");
+	}
+	res = mysql_store_result(&mysql);
+
+	for (int i = 0; fd = mysql_fetch_field(res); i++)  //获取字段名  
+	{
+		field[i] = fd->name;
+		if (strcmp(field[i], key_time) == 0)//截止日期键名
+			flag_num = i;
+		if (strcmp(field[i], key_time_ipid) == 0)//ipid的键名
+			flag_ip_id = i;
+		if (strcmp(field[i], key_time_nameid) == 0)//用户信息id键名
+			flag_name_id = i;
+	}
+	if ((flag_name_id == -1) || (flag_ip_id == -1) || (flag_num == -1))
+		return false;
+
+	int j = mysql_num_fields(res);  // 获取列数  
+
+	char text[] = "";
+	char* customer_Name = text;
+	char* customer_ip = text;
+	char* customer_remind = text;
+	char* ip_id = text;
+	char* name_id = text;
+	idnum = 0;//初始化uid
+
+	while (column = mysql_fetch_row(res))
+	{
+		//for (int i = 0; i < j; i++)//第j个人的i信息,
+		//{
+		int time_year, time_month, time_day;	//数据库中的年月日
+		char* str;
+		SYSTEMTIME now_time;//当前时间
+		//GetLocalTime(&now_time);//获取当前时间
+		GetSystemTime(&now_time);
+		//获取到期时间
+		time_year = char2int(column[flag_num]);
+		str = column[flag_num] + 5;//截去年份和分隔符
+		time_month = char2int(str);
+		str = column[flag_num] + 8;//截去月份和分隔符
+		time_day = char2int(str);
+
+		ip_id = column[flag_ip_id];
+		name_id = column[flag_name_id];
+		//判断今天是第几天
+	//if ((flag[3] == TRUE))
+	//{
+		//判断表中是第几天
+		int q = DaysBetween2Date(now_time.wYear, now_time.wMonth, now_time.wDay, time_year, time_month, time_day);
+
+		if ((q < 3 + 1) && q > 0)//if ((q < day_in + 1) && q > 0)
+		{
+			//读取ip地址
+			customer_ip = QueryDatabase3(table_ip, key_ipid, key_ip, ip_id);
+			//读取用户地址
+			customer_Name = QueryDatabase3(table_user, key_nameid, key_name, name_id);
+			//判断是否读取正常
+			if ((strcmp(customer_ip, "error") == 0) || (strcmp(customer_Name, "error") == 0))//截止日期键名
+				return false;
+			//判断是否过期
+			sprintf_s(tmp, 100, "%s %d年%d月%d日 到期\n%s", customer_ip, time_year, time_month, time_day, customer_Name);//创建要显示的字符串
+			MultiByteToWideChar(CP_ACP, 0, tmp, -1, nid_szInfoTitle[idnum], 100);//转换格式
+			idnum++;
+
+			if (idnum > 31)
+				break;
+			else
+				continue;
+		}
+		else//未过期处理
+		{
+			continue;
+		}
+	}
+	return true;
+}
+
+
+
 void mysqlDlg::init()
 {
 

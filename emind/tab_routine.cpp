@@ -6,7 +6,6 @@
 #include "tab_routine.h"
 #include "afxdialogex.h"
 #include"mysqlDlg.h"
-extern mysqlDlg mysql_data;
 // tab_routine 对话框
 
 IMPLEMENT_DYNAMIC(tab_routine, CDialogEx)

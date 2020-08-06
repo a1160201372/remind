@@ -27,7 +27,7 @@ void tab_mysql::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 }
 
-mysqlDlg mysql_data;
+
 
 BEGIN_MESSAGE_MAP(tab_mysql, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON1, &tab_mysql::OnBnClickedButton1)
