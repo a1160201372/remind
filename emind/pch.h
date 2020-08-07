@@ -16,6 +16,7 @@
 int DisplayResourceNAMessageBox(LPCWSTR text, LPCWSTR title);
 
 extern mysqlDlg mysql_data;
+extern int user_num;
 char* ConvertLPWSTRToLPSTR(LPWSTR lpwszStrIn);
 int DaysBetween2Date(int year1, int month1, int day1, int year2, int month2, int day2);
 int char2int(const char* str);

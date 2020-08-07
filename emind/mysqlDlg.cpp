@@ -34,15 +34,12 @@ bool mysqlDlg::ConnectDatabase(LPWSTR host, LPWSTR user, LPWSTR psw, LPWSTR tabl
 	if (!(mysql_real_connect(&mysql, host_tmp, user_tmp, psw_tmp, table_tmp, port_tmp, NULL, 0)))
 		//中间分别是主机，用户名，密码，数据库名，端口号（可以写默认0或者3306等），可以先写成参数再传进去  
 	{
-		TCHAR Name[100];	//定义TCHAR临时变量，
-		//拼接内容
-		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 100);//转换格式
-		DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
+		
 		return false;
 	}
 	else
 	{
-		DisplayResourceNAMessageBox(_T("yes"), _T("yes1"));
+		//DisplayResourceNAMessageBox(_T("yes"), _T("yes1"));
 		return true;
 	}
 }
@@ -113,6 +110,7 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 	LPWSTR table_user, LPWSTR key_nameid, LPWSTR key_name
 )
 {
+	user_num = 0;
 	int flag_num = -1, flag_ip_id = -1, flag_name_id = -1;
 	//定义变量
 	int idnum;
@@ -125,7 +123,8 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 	char* key_time = ConvertLPWSTRToLPSTR(key_time_tmp);
 	char* key_time_ipid = ConvertLPWSTRToLPSTR(key_time_ipid_tmp);
 	char* key_time_nameid = ConvertLPWSTRToLPSTR(key_time_nameid_tmp);
-
+	char* day_in_tmp1 = ConvertLPWSTRToLPSTR(day_in_tmp);
+	int day_in = (int)day_in_tmp1;
 /*	char* table_ip = ConvertLPWSTRToLPSTR(table_ip_tmp);
 	char* key_ipid = ConvertLPWSTRToLPSTR(key_ipid_tmp);
 	char* key_ip = ConvertLPWSTRToLPSTR(key_ip_tmp);
@@ -135,7 +134,8 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 	char* key_name = ConvertLPWSTRToLPSTR(key_name_tmp);
 	*/
 
-	int day_in = _ttoi(day_in_tmp);
+	//int day_in = _wtoi(day_in_tmp);
+	//int day_in = 3307;
 
 
 	char query[150]; //查询语句
@@ -166,10 +166,10 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 		WriteToLog(str, path);
 		delete[] str;
 #endif
-		TCHAR Name[200];	//定义TCHAR临时变量，
+		//TCHAR Name[200];	//定义TCHAR临时变量，
 		//拼接内容
-		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 200);//转换格式
-		DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
+		//MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 200);//转换格式
+		//DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
 		return false;
 	}
 	else
@@ -238,17 +238,15 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 			sprintf_s(tmp, 100, "%s %d年%d月%d日 到期\n%s", customer_ip, time_year, time_month, time_day, customer_Name);//创建要显示的字符串
 			MultiByteToWideChar(CP_ACP, 0, tmp, -1, nid_szInfoTitle[idnum], 100);//转换格式
 			idnum++;
+			continue;
 
-			if (idnum > 31)
-				break;
-			else
-				continue;
 		}
 		else//未过期处理
 		{
 			continue;
 		}
 	}
+	user_num = idnum;
 	return true;
 }
 
@@ -260,26 +258,26 @@ void mysqlDlg::init()
 
 }
 //读取配置文件（mysql连接信息）
-void mysqlDlg::GetMysql()
+void mysqlDlg::ReadMysql()
 {
 	//分配空间
-	HostName = new wchar_t[10];
-	UserName = new wchar_t[10];
-	password = new wchar_t[10];
-	databases = new wchar_t[10];
-	Port= new wchar_t[10];
-	pws_Boot= new wchar_t[10];
+	HostName = new wchar_t[20];
+	UserName = new wchar_t[20];
+	password = new wchar_t[20];
+	databases = new wchar_t[20];
+	Port= new wchar_t[20];
+	pws_Boot= new wchar_t[20];
 	//读取配置文件
-	GetPrivateProfileString(_T("MYSQL"), _T("HostName"), _T("error"), HostName, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("MYSQL"), _T("UserName"), _T("error"), UserName, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("MYSQL"), _T("password"), _T("error"), password, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("MYSQL"), _T("databases"), _T("error"), databases, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("MYSQL"), _T("Port"), _T("error"), Port, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-	GetPrivateProfileString(_T("MYSQL"), _T("password_Boot"), _T("error"), pws_Boot, 10, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("HostName"), _T("error"), HostName, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("UserName"), _T("error"), UserName, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("password"), _T("error"), password, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("databases"), _T("error"), databases, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("Port"), _T("error"), Port, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("password_Boot"), _T("error"), pws_Boot, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 
 }
 //读取配置文件（查询相关的信息）
-void mysqlDlg::GetQuery()
+void mysqlDlg::ReadQuery()
 {
 	int a=30;
 	//时间
@@ -322,7 +320,7 @@ void mysqlDlg::GetQuery()
 #endif
 }
 //读取配置文件（常规设置的信息）
-void mysqlDlg::GetRoutine()
+void mysqlDlg::ReadRoutine()
 {
 	int a = 30;
 	//分配空间
@@ -341,8 +339,8 @@ void mysqlDlg::GetRoutine()
 
 
 }
-
-//传递信息，私传公（mysql连接信息）
+//设置私人信息
+//传递信息，公传私（mysql连接信息）
 void mysqlDlg::SetMysql()
 {
 	HostName_tmp = HostName;
@@ -352,7 +350,7 @@ void mysqlDlg::SetMysql()
 	Port_tmp = Port;
 	Boot_tmp = pws_Boot;
 }
-//传递信息，私传公（查询信息）
+//传递信息，公传私（查询信息）
 void mysqlDlg::SetQuery()
 {
 	time_table_tmp = time_table;
@@ -366,12 +364,45 @@ void mysqlDlg::SetQuery()
 	user_name_tmp = user_name;
 	user_id_tmp = user_id;
 }
-//传递信息，私传公（基本设置信息）
+//传递信息，公传私（基本设置信息）
 void mysqlDlg::SetRoutine()
 {
 	day_tmp = day;
 	set_Boot_tmp = set_Boot;
 	interval_time_tmp = interval_time;
+}
+
+//获取私人信息
+//传递信息，私传公（mysql连接信息）
+void mysqlDlg::GetMysql()
+{
+	 HostName = HostName_tmp;
+	 UserName = UserName_tmp;
+	 password = password_tmp;
+	databases= databases_tmp;
+	Port = Port_tmp;
+	pws_Boot = Boot_tmp;
+}
+//传递信息，公传私（查询信息）
+void mysqlDlg::GetQuery()
+{
+	time_table = time_table_tmp;
+	time_end = time_end_tmp;
+	time_ipid = time_ipid_tmp;
+	time_userid = time_userid_tmp;
+	ip_table = ip_table_tmp;
+	ip_ip = ip_ip_tmp;
+	ip_id = ip_id_tmp;
+	user_table = user_table_tmp;
+	user_name = user_name_tmp;
+	user_id_tmp = user_id = user_id_tmp;
+}
+//传递信息，公传私（基本设置信息）
+void mysqlDlg::GetRoutine()
+{
+	day = day_tmp;
+	set_Boot = set_Boot_tmp;
+	interval_time = interval_time_tmp;
 }
 
 //将私人变量存储到配置文件（Mysql信息）

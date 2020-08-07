@@ -5,7 +5,7 @@
 #include "mysql.h"
 #include <iostream>
 // 当使用预编译的头时，需要使用此源文件，编译才能成功。
-
+int user_num;//快到期用户个数
 int DisplayResourceNAMessageBox(LPCWSTR text, LPCWSTR title)
 {
 	int msgboxID = MessageBox(

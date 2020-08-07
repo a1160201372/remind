@@ -61,8 +61,8 @@ BOOL TAB_population::OnInitDialog()
 	user_tab_mysql.ShowWindow(SW_SHOW);
 	user_tab_query.ShowWindow(SW_HIDE);
 	user_tab_routine.ShowWindow(SW_HIDE);
+
 	user_tab_mysql.init();//初始化mysql界面
-	user_tab_query.init();//初始化mysql界面
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 

@@ -37,7 +37,7 @@ END_MESSAGE_MAP()
 void tab_routine::init()
 {
 	//读取配置文件
-	mysql_data.GetRoutine();
+	mysql_data.ReadRoutine();
 	//判断开机启动状态
 	CString str1(mysql_data.set_Boot);
 	CString str2(_T("yes"));

@@ -10,6 +10,7 @@
 #define IDD_TAB_query                   134
 #define IDD_TAB_routine                 140
 #define IDR_MENU2                       143
+#define IDI_ICON1                       144
 #define IDC_SQL_BUTTON_TEST             1000
 #define IDC_TAB1                        1001
 #define IDC_BUTTON1                     1004
@@ -36,6 +37,10 @@
 #define IDC_TAB_Q_time_table            1038
 #define IDC_TAB_M_base                  1038
 #define IDC_TAB_Q_ip_table              1039
+#define IDC_M_Database_Status           1040
+#define IDC_BUTTON_Database             1041
+#define IDC_M_Database_num              1042
+#define IDC_BUTTON_user                 1043
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -49,9 +54,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        144
+#define _APS_NEXT_RESOURCE_VALUE        145
 #define _APS_NEXT_COMMAND_VALUE         32779
-#define _APS_NEXT_CONTROL_VALUE         1040
+#define _APS_NEXT_CONTROL_VALUE         1042
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

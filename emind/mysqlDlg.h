@@ -4,14 +4,18 @@ class mysqlDlg
 {
 	public://公共
 		//读取配置文件，读到公共
-		void GetMysql();
-		void GetQuery();
-		void GetRoutine();
+		void ReadMysql();
+		void ReadQuery();
+		void ReadRoutine();
 
-		//公共传到私人
+		//私人传到公共
 		void SetMysql();
 		void SetQuery();
 		void SetRoutine();
+		//公共传到私人
+		void GetMysql();
+		void GetQuery();
+		void GetRoutine();
 		//存储私人数据
 		void SaveMysql(bool flag);
 		void SaveQuery();
@@ -60,6 +64,8 @@ class mysqlDlg
 		LPWSTR	day;	//
 		LPWSTR	interval_time;	//
 		LPWSTR	set_Boot;	//
+
+
 
 
 		//

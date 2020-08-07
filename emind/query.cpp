@@ -39,7 +39,7 @@ END_MESSAGE_MAP()
 //初始化函数
 void tab_query::init()
 {
-	mysql_data.GetQuery();//读到公共
+	mysql_data.ReadQuery();//读到公共
 
 	SetDlgItemText(IDC_TAB_Q_time_table, mysql_data.time_table);
 	SetDlgItemText(IDC_TAB_Q_time_end, mysql_data.time_end);
@@ -95,7 +95,6 @@ void tab_query::OnBnClickedButton2()
 
 	//将私人，存储到配置文件
 	mysql_data.SaveQuery(); 
-
 
 }
 
