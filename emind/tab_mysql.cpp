@@ -101,7 +101,7 @@ void tab_mysql::OnBnClickedButton1()
 
 			//将私人变量，存储到配置文件
 			mysql_data.SaveMysql(flag_pws); 
-			win_flag = AfxMessageBox(_T("设置成功"), (MB_ICONINFORMATION | MB_OK));
+			AfxMessageBox(_T("设置成功"), (MB_ICONINFORMATION | MB_OK));
 
 			break;
 		}
@@ -140,13 +140,16 @@ void tab_mysql::OnBnClickedSqlButtonTest()
 	//连接数据库
 	if (mysql_data.ConnectDatabase(mysql_data.HostName, mysql_data.UserName, mysql_data.password, mysql_data.databases, mysql_data.Port) == 1)
 	{//连接成功
-		DisplayResourceNAMessageBox(_T("提示"),_T("连接成功！"));
+		AfxMessageBox(_T("连接数据库成功"), (MB_ICONINFORMATION | MB_OK));
+		mysql_close(&mysql);	 //关闭一个服务器连接。
 	}
 	else {//连接失败
+	
 		TCHAR Name[100];	//定义TCHAR临时变量，
 		//拼接内容
 		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 100);//转换格式
-		DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
+		AfxMessageBox(Name, (MB_OK| MB_ICONSTOP));
+
 	}
 }
 
@@ -179,6 +182,7 @@ void tab_mysql::OnBnClickedButton2()
 		SetDlgItemText(IDC_TAB_M_base, mysql_data.databases);
 		SetDlgItemText(IDC_TAB_M_prot, mysql_data.Port);
 		SetDlgItemText(IDC_TAB_M_user, mysql_data.UserName);
+		win_flag = AfxMessageBox(_T("恢复成功"), (MB_ICONINFORMATION | MB_OK));
 		}
 	}
 }

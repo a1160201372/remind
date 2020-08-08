@@ -103,6 +103,8 @@ void tab_query::OnBnClickedButton2()
 
 		//将私人，存储到配置文件
 		mysql_data.SaveQuery();
+		win_flag = AfxMessageBox(_T("设置成功"), (MB_ICONINFORMATION | MB_OK));
+
 		break;
 	}
 	case IDNO://否
@@ -138,6 +140,7 @@ void tab_query::OnBnClickedButton3()
 			SetDlgItemText(IDC_TAB_Q_user_table, mysql_data.user_table);
 			SetDlgItemText(IDC_TAB_Q_user_name1, mysql_data.user_name);
 			SetDlgItemText(IDC_TAB_Q_user_id1, mysql_data.user_id);
+			win_flag = AfxMessageBox(_T("恢复成功"), (MB_ICONINFORMATION | MB_OK));
 			break;
 		}
 		case IDNO://否
@@ -158,6 +161,8 @@ void tab_query::OnBnClickedButton1()
 	CString ip_table, ip_ip, ip_id;
 	CString user_table, user_name, user_id;
 	bool flag_pws = 0;
+	//获取Mysql信息
+	mysql_data.ReadMysql();
 	//获取表格内容
 	GetDlgItem(IDC_TAB_Q_time_table)->GetWindowText(time_table);
 	mysql_data.time_table = (LPWSTR)(LPCWSTR)time_table;
@@ -195,7 +200,6 @@ void tab_query::OnBnClickedButton1()
 		{
 			AfxMessageBox(error_flag, (MB_OK | MB_ICONSTOP));
 			//AfxMessageBox(error_flag, (MB_YESNO | MB_ICONQUESTION));
-			
 		}
 	}
 	else {//连接失败

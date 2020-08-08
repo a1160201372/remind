@@ -42,11 +42,12 @@ class mysqlDlg
 			//
 		//¹«¿ª
 		//Mysql
-		LPWSTR	HostName;	//
-		LPWSTR	Port, pws_Boot;		//
-		LPWSTR	UserName;	//
-		LPWSTR	password;	//
-		LPWSTR	databases;	//
+		wchar_t* HostName;	//
+		wchar_t* Port;
+		wchar_t*	pws_Boot;		//
+		wchar_t* UserName;	//
+		wchar_t* password;	//
+		wchar_t* databases;	//
 		//²éÑ¯
 		LPWSTR	time_table;	//
 		LPWSTR	time_end;	//

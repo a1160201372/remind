@@ -303,13 +303,22 @@ void mysqlDlg::ReadMysql()
 	Port = new wchar_t[20];
 	pws_Boot = new wchar_t[20];
 	//读取配置文件
+#if 0//测试
 	GetPrivateProfileString(_T("MYSQL"), _T("HostName"), _T("error"), HostName, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("MYSQL"), _T("UserName"), _T("error"), UserName, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("MYSQL"), _T("password"), _T("error"), password, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("MYSQL"), _T("databases"), _T("error"), databases, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("MYSQL"), _T("Port"), _T("error"), Port, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("MYSQL"), _T("password_Boot"), _T("error"), pws_Boot, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
-
+#endif
+#if 1//正式
+	GetPrivateProfileString(_T("MYSQL"), _T("HostName"), _T("error"), HostName, 20, _T(".\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("UserName"), _T("error"), UserName, 20, _T(".\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("password"), _T("error"), password, 20, _T(".\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("databases"), _T("error"), databases, 20, _T(".\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("Port"), _T("error"), Port, 20, _T(".\\config.ini"));
+	GetPrivateProfileString(_T("MYSQL"), _T("password_Boot"), _T("error"), pws_Boot, 20, _T(".\\config.ini"));
+#endif
 
 }
 //读取配置文件（查询相关的信息）
@@ -329,7 +338,7 @@ void mysqlDlg::ReadQuery()
 	user_table = new wchar_t[a];
 	user_name = new wchar_t[a];
 	user_id = new wchar_t[a];
-#if 0//正式
+#if 1//正式
 	GetPrivateProfileString(_T("TIME"), _T("time_table"), _T("error"), time_table, a, _T(".\\config.ini"));
 	GetPrivateProfileString(_T("TIME"), _T("time_end"), _T("error"), time_end, a, _T(".\\config.ini"));
 	GetPrivateProfileString(_T("TIME"), _T("time_ipid"), _T("error"), time_ipid, a, _T(".\\config.ini"));
@@ -342,7 +351,7 @@ void mysqlDlg::ReadQuery()
 	GetPrivateProfileString(_T("USERS"), _T("user_id"), _T("error"), user_id, a, _T(".\\config.ini"));
 #endif
 	//读取配置文件
-#if 1//测试
+#if 0//测试
 	GetPrivateProfileString(_T("TIME"), _T("time_table"), _T("error"), time_table, a, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("TIME"), _T("time_end"), _T("error"), time_end, a, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("TIME"), _T("time_ipid"), _T("error"), time_ipid, a, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
@@ -366,12 +375,16 @@ void mysqlDlg::ReadRoutine()
 	//解密
 
 	//读取配置文件
-#if 1//测试
+#if 0//测试
 	GetPrivateProfileString(_T("set"), _T("day"), _T("error"), day, a, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("set"), _T("interval_time"), _T("error"), interval_time, a, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("set"), _T("set_Boot"), _T("error"), set_Boot, a, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 #endif
-
+#if 1//测试
+	GetPrivateProfileString(_T("set"), _T("day"), _T("error"), day, a, _T(".\\config.ini"));
+	GetPrivateProfileString(_T("set"), _T("interval_time"), _T("error"), interval_time, a, _T(".\\config.ini"));
+	GetPrivateProfileString(_T("set"), _T("set_Boot"), _T("error"), set_Boot, a, _T(".\\config.ini"));
+#endif
 
 
 }
@@ -379,34 +392,14 @@ void mysqlDlg::ReadRoutine()
 //传递信息，公传私（mysql连接信息）
 void mysqlDlg::SetMysql()
 {
-	CString str, str1, str2, str3,str4, str5;//中间变量
 	
-	HostName_tmp = new wchar_t[20];
-	UserName_tmp = new wchar_t[20];
-	password_tmp = new wchar_t[20];
-	databases_tmp = new wchar_t[20];
-	Port_tmp = new wchar_t[20];
-	Boot_tmp = new wchar_t[20];
-
-	 str = ConvertLPWSTRToLPSTR(HostName);
-	HostName_tmp = (LPWSTR)(LPCTSTR)str;
-	 str1 = ConvertLPWSTRToLPSTR(UserName);
-	UserName_tmp = (LPWSTR)(LPCTSTR)str1;
-	 str2 = ConvertLPWSTRToLPSTR(password);
-	password_tmp = (LPWSTR)(LPCTSTR)str2;
-	str3 = ConvertLPWSTRToLPSTR(databases);
-	databases_tmp = (LPWSTR)(LPCTSTR)str3;
-	 str4 = ConvertLPWSTRToLPSTR(Port);
-	Port_tmp = (LPWSTR)(LPCTSTR)str4;
-	 str5 = ConvertLPWSTRToLPSTR(pws_Boot);
-	Boot_tmp = (LPWSTR)(LPCTSTR)str5;
-	/*HostName_tmp = HostName.GetBuffer();
+	
 	HostName_tmp = HostName;
 	UserName_tmp = UserName;
 	password_tmp = password;
 	databases_tmp = databases;
 	Port_tmp = Port;
-	Boot_tmp = pws_Boot;*/
+	Boot_tmp = pws_Boot;
 }
 //传递信息，公传私（查询信息）
 void mysqlDlg::SetQuery()
@@ -467,6 +460,7 @@ void mysqlDlg::GetRoutine()
 void mysqlDlg::SaveMysql(bool falg)
 {
 	//加密
+#if 0//测试
 	WritePrivateProfileString(_T("MYSQL"), _T("HostName"), HostName_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	WritePrivateProfileString(_T("MYSQL"), _T("UserName"), UserName_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	WritePrivateProfileString(_T("MYSQL"), _T("databases"), databases_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
@@ -475,11 +469,23 @@ void mysqlDlg::SaveMysql(bool falg)
 		WritePrivateProfileString(_T("MYSQL"), _T("password"), password_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	else
 		WritePrivateProfileString(_T("MYSQL"), _T("password"), _T(" "), _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+#endif
+#if 1//正式
+	WritePrivateProfileString(_T("MYSQL"), _T("HostName"), HostName_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("MYSQL"), _T("UserName"), UserName_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("MYSQL"), _T("databases"), databases_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("MYSQL"), _T("Port"), Port_tmp, _T(".\\config.ini"));
+	if (falg == 1)
+		WritePrivateProfileString(_T("MYSQL"), _T("password"), password_tmp, _T(".\\config.ini"));
+	else
+		WritePrivateProfileString(_T("MYSQL"), _T("password"), _T(" "), _T(".\\config.ini"));
+#endif
 
 }
 //将私人变量存储到配置文件（查询信息）
 void  mysqlDlg::SaveQuery()
 {
+#if 0
 	WritePrivateProfileString(_T("TIME"), _T("time_table"), time_table_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	WritePrivateProfileString(_T("TIME"), _T("time_end"), time_end_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	WritePrivateProfileString(_T("TIME"), _T("time_ipid"), time_ipid_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
@@ -492,15 +498,35 @@ void  mysqlDlg::SaveQuery()
 	WritePrivateProfileString(_T("USERS"), _T("user_table"), user_table_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	WritePrivateProfileString(_T("USERS"), _T("user_name"), user_name_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	WritePrivateProfileString(_T("USERS"), _T("user_id"), user_id_tmp, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+#endif
+#if 1
+	WritePrivateProfileString(_T("TIME"), _T("time_table"), time_table_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("TIME"), _T("time_end"), time_end_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("TIME"), _T("time_ipid"), time_ipid_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("TIME"), _T("time_userid"), time_userid_tmp, _T(".\\config.ini"));
+
+	WritePrivateProfileString(_T("IP"), _T("ip_table"), ip_table_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("IP"), _T("ip_ip"), ip_ip_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("IP"), _T("ip_id"), ip_id_tmp, _T(".\\config.ini"));
+
+	WritePrivateProfileString(_T("USERS"), _T("user_table"), user_table_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("USERS"), _T("user_name"), user_name_tmp, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("USERS"), _T("user_id"), user_id_tmp, _T(".\\config.ini"));
+#endif
 
 }
 
 void  mysqlDlg::SaveRoutine()
 {
-#if 1//测试
+#if 0//测试
 	WritePrivateProfileString(_T("set"), _T("day"), day, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	WritePrivateProfileString(_T("set"), _T("interval_time"), interval_time, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	WritePrivateProfileString(_T("set"), _T("set_Boot"), set_Boot, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+#endif
+#if 1//正式
+	WritePrivateProfileString(_T("set"), _T("day"), day, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("set"), _T("interval_time"), interval_time, _T(".\\config.ini"));
+	WritePrivateProfileString(_T("set"), _T("set_Boot"), set_Boot, _T(".\\config.ini"));
 #endif
 }
 //释放资源（mysql连接信息）
