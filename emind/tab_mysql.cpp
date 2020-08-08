@@ -42,8 +42,8 @@ void tab_mysql::init()
 {
 	//读取exe地址
 
-	//mysql_data.ReadMysql();//配置文件读到公共
-	mysql_data.GetMysql();//公共
+	mysql_data.ReadMysql();//配置文件读到公共
+	//mysql_data.GetMysql();//公共
 	CString str1(mysql_data.pws_Boot);
 	CString str2(_T("yes"));
 	//判断配置文件中的记住密码的状态
@@ -66,10 +66,10 @@ void tab_mysql::OnBnClickedButton1()
 {
 	// TODO: 在此添加控件通知处理程序代码
 	int win_flag;
-	win_flag =AfxMessageBox(_T("是否应用当前设置？"), (MB_YESNO| MB_ICONQUESTION));
+	win_flag =AfxMessageBox(_T("是否应用当前设置？"), (MB_OKCANCEL | MB_ICONINFORMATION));
 	switch (win_flag)
 	{
-		case IDYES:
+		case IDOK:
 		{
 			//定义变量
 			CString HostName, UserName, password, databases, Port, Boot;
@@ -103,10 +103,6 @@ void tab_mysql::OnBnClickedButton1()
 			mysql_data.SaveMysql(flag_pws); 
 			win_flag = AfxMessageBox(_T("设置成功"), (MB_ICONINFORMATION | MB_OK));
 
-			break;
-		}
-		case IDNO:
-		{
 			break;
 		}
 		default:
@@ -158,23 +154,31 @@ void tab_mysql::OnBnClickedSqlButtonTest()
 void tab_mysql::OnBnClickedButton2()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	int win_flag;
+	win_flag = AfxMessageBox(_T("是否应用当前设置？"), (MB_OKCANCEL | MB_ICONINFORMATION));
+	switch (win_flag)
+	{
+	case IDOK:
+	{
 
-	//读取私人变量
-	mysql_data.GetMysql();
-	//显示
-	CString str1(mysql_data.pws_Boot);
-	CString str2(_T("yes"));
-	if (0 == str1.CompareNoCase(str2)) {
-		((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(1);
-		SetDlgItemText(IDC_TAB_M_pws, mysql_data.password);
+		//读取配置文件
+		mysql_data.ReadMysql();
+		//显示
+		CString str1(mysql_data.pws_Boot);
+		CString str2(_T("yes"));
+		if (0 == str1.CompareNoCase(str2)) {
+			((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(1);
+			SetDlgItemText(IDC_TAB_M_pws, mysql_data.password);
+		}
+		else {//不打勾
+			((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(0);
+			SetDlgItemText(IDC_TAB_M_pws, NULL);
+		}
+		//显示到文字栏
+		SetDlgItemText(IDC_TAB_M_ip, mysql_data.HostName);
+		SetDlgItemText(IDC_TAB_M_base, mysql_data.databases);
+		SetDlgItemText(IDC_TAB_M_prot, mysql_data.Port);
+		SetDlgItemText(IDC_TAB_M_user, mysql_data.UserName);
+		}
 	}
-	else {//不打勾
-		((CButton*)GetDlgItem(IDC_CHECK1))->SetCheck(0);
-		SetDlgItemText(IDC_TAB_M_pws, NULL);
-	}
-	//显示到文字栏
-	SetDlgItemText(IDC_TAB_M_ip, mysql_data.HostName);
-	SetDlgItemText(IDC_TAB_M_base, mysql_data.databases);
-	SetDlgItemText(IDC_TAB_M_prot, mysql_data.Port);
-	SetDlgItemText(IDC_TAB_M_user, mysql_data.UserName);
 }

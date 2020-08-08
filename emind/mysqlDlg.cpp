@@ -10,7 +10,7 @@ extern MYSQL_FIELD* fd;  //字段列数组
 TCHAR nid_szInfoTitle[100][100];//存储气泡的显示内容
 extern MYSQL_RES* res; //这个结构代表返回行的一个查询结果集
 extern MYSQL_ROW column; //一个行数据的类型安全(type-safe)的表示，表示数据行的列
-
+TCHAR error_flag[200];
 bool mysqlDlg::ConnectDatabase(LPWSTR host, LPWSTR user, LPWSTR psw, LPWSTR table, LPWSTR port)
 {
 	//初始化mysql  
@@ -46,7 +46,7 @@ bool mysqlDlg::ConnectDatabase(LPWSTR host, LPWSTR user, LPWSTR psw, LPWSTR tabl
 
 //查询具体数值
 
-char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_tmp, char* id_tmp)
+char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_tmp, char* id_tmp,bool flag_ip_user)
 {
 	//转换格式
 
@@ -69,11 +69,11 @@ char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_t
 	if (mysql_query(&mysql, tableName))        //执行SQL语句  
 	{
 		//printf("Query failed (%s)\n", mysql_error(&mysql));
-		TCHAR Name[100];	//定义TCHAR临时变量，
+		//TCHAR Name[100];	//定义TCHAR临时变量，
 		//拼接内容
-		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 100);//转换格式
-		DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
-		return "error";
+		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, error_flag, 100);//转换格式
+		//AfxMessageBox(Name, (MB_YESNO | MB_ICONQUESTION));
+		return "error1";
 	}
 	else
 	{
@@ -90,7 +90,27 @@ char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_t
 			flag_info = i;
 	}
 	if ((flag_id == -1) || (flag_info == -1))
-		return "error";
+	{
+		char tableName[100];
+		if (flag_id == -1) {
+			if(flag_ip_user==1)//ip
+				sprintf_s(tableName, 100, "ip键名_ip地址错误：%s", key_id);
+			else if (flag_ip_user == 0)//user
+				sprintf_s(tableName, 100, "用户键名_用户信息错误：%s", key_id);
+		}
+		else if (flag_info == -1)
+		{
+			if (flag_ip_user == 1)//ip
+				sprintf_s(tableName, 100, "ip键名_ip的ID错误：%s", key);
+
+			else if (flag_ip_user == 0)//user
+				sprintf_s(tableName, 100, "ip键名_ip的ID错误：%s", key);
+		}
+		//error_flag赋值
+		MultiByteToWideChar(CP_ACP, 0, tableName, -1, error_flag, 100);//转换格式
+
+		return "error1";
+	}
 	char* info_tmp = "";
 	int j = mysql_num_fields(res1);  // 获取列数  
 	while (column1 = mysql_fetch_row(res1))
@@ -101,6 +121,8 @@ char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_t
 			return info_tmp;
 		}
 	}
+	//MultiByteToWideChar(CP_ACP, 0, ("未找到提配"), -1, error_flag, 100);//转换格式
+
 	return "error";
 }
 
@@ -166,9 +188,10 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 		WriteToLog(str, path);
 		delete[] str;
 #endif
-		//TCHAR Name[200];	//定义TCHAR临时变量，
+		TCHAR Name[200];	//定义TCHAR临时变量，
 		//拼接内容
-		//MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 200);//转换格式
+		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, error_flag, 200);//转换格式
+		//AfxMessageBox(Name, (MB_YESNO | MB_ICONQUESTION));
 		//DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);
 		return false;
 	}
@@ -189,7 +212,19 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 			flag_name_id = i;
 	}
 	if ((flag_name_id == -1) || (flag_ip_id == -1) || (flag_num == -1))
+	{
+		char tableName[100];
+		if (flag_name_id == -1)
+			sprintf_s(tableName, 100, "时间键名_到期时间：%s\t错误", key_time_nameid);
+		else if (flag_ip_id == -1)
+			sprintf_s(tableName, 100, "时间键名_ip的ID：%s\t错误", key_time_ipid);
+		else if (flag_num == -1)
+			sprintf_s(tableName, 100, "时间键名_用户的ID：%s\t错误", key_time_nameid);
+		//error_flag赋值
+		MultiByteToWideChar(CP_ACP, 0, tableName, -1, error_flag, 100);//转换格式
 		return false;
+	}
+		
 
 	int j = mysql_num_fields(res);  // 获取列数  
 
@@ -228,11 +263,11 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 		if ((q < 3 + 1) && q > 0)//if ((q < day_in + 1) && q > 0)
 		{
 			//读取ip地址
-			customer_ip = QueryDatabase3(table_ip, key_ipid, key_ip, ip_id);
+			customer_ip = QueryDatabase3(table_ip, key_ipid, key_ip, ip_id,1);
 			//读取用户地址
-			customer_Name = QueryDatabase3(table_user, key_nameid, key_name, name_id);
+			customer_Name = QueryDatabase3(table_user, key_nameid, key_name, name_id,0);
 			//判断是否读取正常
-			if ((strcmp(customer_ip, "error") == 0) || (strcmp(customer_Name, "error") == 0))//截止日期键名
+			if ((strcmp(customer_ip, "error1") == 0) || (strcmp(customer_Name, "error1") == 0))//截止日期键名
 				return false;
 			//判断是否过期
 			sprintf_s(tmp, 100, "%s %d年%d月%d日 到期\n%s", customer_ip, time_year, time_month, time_day, customer_Name);//创建要显示的字符串
@@ -265,8 +300,8 @@ void mysqlDlg::ReadMysql()
 	UserName = new wchar_t[20];
 	password = new wchar_t[20];
 	databases = new wchar_t[20];
-	Port= new wchar_t[20];
-	pws_Boot= new wchar_t[20];
+	Port = new wchar_t[20];
+	pws_Boot = new wchar_t[20];
 	//读取配置文件
 	GetPrivateProfileString(_T("MYSQL"), _T("HostName"), _T("error"), HostName, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("MYSQL"), _T("UserName"), _T("error"), UserName, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
@@ -274,6 +309,7 @@ void mysqlDlg::ReadMysql()
 	GetPrivateProfileString(_T("MYSQL"), _T("databases"), _T("error"), databases, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("MYSQL"), _T("Port"), _T("error"), Port, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
 	GetPrivateProfileString(_T("MYSQL"), _T("password_Boot"), _T("error"), pws_Boot, 20, _T("D:\\git\\到期提醒\\新建文件夹\\到期提醒0.3\\config.ini"));
+
 
 }
 //读取配置文件（查询相关的信息）
@@ -343,12 +379,34 @@ void mysqlDlg::ReadRoutine()
 //传递信息，公传私（mysql连接信息）
 void mysqlDlg::SetMysql()
 {
+	CString str, str1, str2, str3,str4, str5;//中间变量
+	
+	HostName_tmp = new wchar_t[20];
+	UserName_tmp = new wchar_t[20];
+	password_tmp = new wchar_t[20];
+	databases_tmp = new wchar_t[20];
+	Port_tmp = new wchar_t[20];
+	Boot_tmp = new wchar_t[20];
+
+	 str = ConvertLPWSTRToLPSTR(HostName);
+	HostName_tmp = (LPWSTR)(LPCTSTR)str;
+	 str1 = ConvertLPWSTRToLPSTR(UserName);
+	UserName_tmp = (LPWSTR)(LPCTSTR)str1;
+	 str2 = ConvertLPWSTRToLPSTR(password);
+	password_tmp = (LPWSTR)(LPCTSTR)str2;
+	str3 = ConvertLPWSTRToLPSTR(databases);
+	databases_tmp = (LPWSTR)(LPCTSTR)str3;
+	 str4 = ConvertLPWSTRToLPSTR(Port);
+	Port_tmp = (LPWSTR)(LPCTSTR)str4;
+	 str5 = ConvertLPWSTRToLPSTR(pws_Boot);
+	Boot_tmp = (LPWSTR)(LPCTSTR)str5;
+	/*HostName_tmp = HostName.GetBuffer();
 	HostName_tmp = HostName;
 	UserName_tmp = UserName;
 	password_tmp = password;
 	databases_tmp = databases;
 	Port_tmp = Port;
-	Boot_tmp = pws_Boot;
+	Boot_tmp = pws_Boot;*/
 }
 //传递信息，公传私（查询信息）
 void mysqlDlg::SetQuery()

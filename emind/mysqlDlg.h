@@ -37,7 +37,7 @@ class mysqlDlg
 			LPWSTR table_ip_tmp, LPWSTR key_ipid_tmp, LPWSTR key_ip_tmp,
 			LPWSTR table_user_tmp, LPWSTR key_nameid_tmp, LPWSTR key_name_tmp
 		);
-		char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_tmp, char* id_tmp);
+		char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_tmp, char* id_tmp,bool flag_ip_user);
 
 			//
 		//公开
@@ -70,15 +70,15 @@ class mysqlDlg
 
 		//
 
-	protected://私人
+private://私人
 
 	//连接
 	
-		LPWSTR	HostName_tmp;//
-		LPWSTR	Port_tmp, Boot_tmp;	//
-		LPWSTR	UserName_tmp;//
-		LPWSTR	password_tmp;//
-		LPWSTR  databases_tmp;//
+	LPWSTR	HostName_tmp;//
+	LPWSTR	Port_tmp, Boot_tmp;	//
+	LPWSTR	UserName_tmp;//
+	LPWSTR	password_tmp;//
+	LPWSTR  databases_tmp;//
 
 		//查询
 		LPWSTR	time_table_tmp;	//
