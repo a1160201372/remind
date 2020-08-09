@@ -41,6 +41,7 @@
 #define IDC_BUTTON_Database             1041
 #define IDC_M_Database_num              1042
 #define IDC_BUTTON_user                 1043
+#define IDC_BUTTON_now                  1044
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773

@@ -27,6 +27,8 @@ protected:
 	CMenu m_Menu;
 	// 生成的消息映射函数
 	virtual BOOL OnInitDialog();
+	afx_msg void OnCancel();//最小化响应
+	afx_msg void OnClose();//关闭询问
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	afx_msg LRESULT OnShowTask(WPARAM wParam, LPARAM lParam);
@@ -36,4 +38,5 @@ public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	afx_msg void OnBnClickedButtonDatabase();
 	afx_msg void OnBnClickedButtonuser();
+	afx_msg void OnBnClickedButtonnow();
 };
