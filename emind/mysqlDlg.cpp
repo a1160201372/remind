@@ -103,17 +103,17 @@ char* mysqlDlg::QueryDatabase3(LPWSTR table_tmp, LPWSTR key_id_tmp, LPWSTR key_t
 		char tableName[100];
 		if (flag_id == -1) {
 			if(flag_ip_user==1)//ip
-				sprintf_s(tableName, 100, "ip键名_ip地址错误：%s", key_id);
+				sprintf_s(tableName, 100, "ip键名中的\tip的ID错误：%s", key_id);
 			else if (flag_ip_user == 0)//user
-				sprintf_s(tableName, 100, "用户键名_用户信息错误：%s", key_id);
+				sprintf_s(tableName, 100, "用户键名中的\t用户的ID错误：%s", key_id);
 		}
 		else if (flag_info == -1)
 		{
 			if (flag_ip_user == 1)//ip
-				sprintf_s(tableName, 100, "ip键名_ip的ID错误：%s", key);
+				sprintf_s(tableName, 100, "ip键名中的\tip地址错误：%s", key);
 
 			else if (flag_ip_user == 0)//user
-				sprintf_s(tableName, 100, "ip键名_ip的ID错误：%s", key);
+				sprintf_s(tableName, 100, "用户键名中的\t用户信息错误：%s", key);
 		}
 		//error_flag赋值
 		MultiByteToWideChar(CP_ACP, 0, tableName, -1, error_flag, 100);//转换格式
@@ -224,11 +224,11 @@ bool mysqlDlg::QueryDatabase2(LPWSTR table1_tmp, LPWSTR day_in_tmp,
 	{
 		char tableName[100];
 		if (flag_name_id == -1)
-			sprintf_s(tableName, 100, "时间键名_到期时间：%s\t错误", key_time_nameid);
+			sprintf_s(tableName, 100, "时间键名中的：\t用户ID错误：%s", key_time_nameid);
 		else if (flag_ip_id == -1)
-			sprintf_s(tableName, 100, "时间键名_ip的ID：%s\t错误", key_time_ipid);
+			sprintf_s(tableName, 100, "时间键名中的：\tIPID错误：%s", key_time_ipid);
 		else if (flag_num == -1)
-			sprintf_s(tableName, 100, "时间键名_用户的ID：%s\t错误", key_time_nameid);
+			sprintf_s(tableName, 100, "时间键名中的：\t到期时间错误：%s", key_time);
 		//error_flag赋值
 		MultiByteToWideChar(CP_ACP, 0, tableName, -1, error_flag, 100);//转换格式
 		return false;
