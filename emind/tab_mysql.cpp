@@ -98,7 +98,7 @@ void tab_mysql::OnBnClickedButton1()
 			}
 			mysql_data.SetMysql();//传到私人变量
 			//加密配置文件，函数
-
+			flag_pws = 1;
 			//将私人变量，存储到配置文件
 			mysql_data.SaveMysql(flag_pws); 
 			AfxMessageBox(_T("设置成功"), (MB_ICONINFORMATION | MB_OK));

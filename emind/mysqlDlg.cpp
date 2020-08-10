@@ -31,6 +31,15 @@ bool mysqlDlg::ConnectDatabase(LPWSTR host, LPWSTR user, LPWSTR psw, LPWSTR tabl
 
 	int port_tmp = _ttoi(port);
 	
+
+	unsigned int timeout = 1;
+	
+	int ret = mysql_options(&mysql, MYSQL_OPT_CONNECT_TIMEOUT, (const char*)&timeout);
+	if (ret) {
+		/* Handle error */
+		return false;
+	}
+
 	if (!(mysql_real_connect(&mysql, host_tmp, user_tmp, psw_tmp, table_tmp, port_tmp, NULL, 0)))
 		//中间分别是主机，用户名，密码，数据库名，端口号（可以写默认0或者3306等），可以先写成参数再传进去  
 	{

@@ -62,6 +62,7 @@ BOOL CemindDlg::OnInitDialog()
 	
 	//初始化定时器
 	SetTimer(1, 60000, NULL);//一个5秒触发一次,用于检测数据库。
+	SetTimer(25, 3000, NULL);//。
 	//设置菜单项
 	m_Menu.LoadMenu(IDR_MENU1);  //  IDR_MENU1
 	SetMenu(&m_Menu);
@@ -83,52 +84,10 @@ BOOL CemindDlg::OnInitDialog()
 
 	//转换格式
 	
-	//连接数据库
-	if (mysql_data.ConnectDatabase(mysql_data.HostName, mysql_data.UserName, mysql_data.password, mysql_data.databases, mysql_data.Port) == 1)
-	{//连接成功
-		base_flag = 1;
-		SetTimer(24, 60000, NULL);//用于查询数据
-		SetDlgItemText(IDC_M_Database_Status, _T("已连接"));
-		
-		m_nid.dwInfoFlags = NIIF_INFO;
-		wcscpy_s(m_nid.szInfoTitle, _T("提示")); //给nid赋值
-		wcscpy_s(m_nid.szInfo, _T("数据库连接成功！"));// 复制
-		Shell_NotifyIcon(NIM_MODIFY, &m_nid);
+	//显示连接状态
+	SetDlgItemText(IDC_M_Database_num, LPCTSTR(_T("正在查询")));
+	SetDlgItemText(IDC_M_Database_Status, _T("正在连接"));
 
-		bool a;
-		a = mysql_data.QueryDatabase2(mysql_data.time_table, mysql_data.day,
-			mysql_data.time_end, mysql_data.time_ipid, mysql_data.time_userid,
-			mysql_data.ip_table, mysql_data.ip_id, mysql_data.ip_ip,
-			mysql_data.user_table, mysql_data.user_id, mysql_data.user_name);
-		if (a == 1)
-			//显示查询到多少个到期用户
-		{
-			CString str;
-			str.Format(_T("%d"), user_num);
-			SetDlgItemText(IDC_M_Database_num, LPCTSTR(str));
-			//弹窗显示
-		}
-		else//查询失败
-		{
-			SetDlgItemText(IDC_M_Database_num, LPCTSTR(_T("查询异常!")));
-
-		}
-
-		mysql_close(&mysql);	 //关闭一个服务器连接。
-	}
-	else{//连接失败
-	/*	TCHAR Name[100];	//定义TCHAR临时变量，
-		//拼接内容
-		MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 100);//转换格式
-		DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);*/
-		base_flag = 0;
-		SetDlgItemText(IDC_M_Database_Status, _T("连接失败"));
-		SetDlgItemText(IDC_M_Database_num, LPCTSTR(_T("连接失败")));
-		m_nid.dwInfoFlags = NIIF_ERROR;
-		wcscpy_s(m_nid.szInfoTitle, _T("警告")); //给nid赋值
-		wcscpy_s(m_nid.szInfo, _T("数据库连接失败！"));// 复制
-		Shell_NotifyIcon(NIM_MODIFY, &m_nid);
-	}
 	
 	//查询数据
 	
@@ -292,6 +251,8 @@ void CemindDlg::OnTimer(UINT_PTR nIDEvent)
 			//int flag_tmp;
 			//读取配置文件
 			mysql_data.ReadRoutine();
+			mysql_data.ReadMysql();//读到公共
+			mysql_data.ReadQuery();//读到公共
 			char* table1 = ConvertLPWSTRToLPSTR(mysql_data.interval_time);
 
 			int flag_tmp = atoi(table1);
@@ -361,8 +322,59 @@ void CemindDlg::OnTimer(UINT_PTR nIDEvent)
 				
 			break;
 		}
-	}
+		case 25:
+		{
+			KillTimer(25);
+			mysql_data.ReadMysql();//读到公共
+			mysql_data.ReadQuery();//读到公共
+			if (mysql_data.ConnectDatabase(mysql_data.HostName, mysql_data.UserName, mysql_data.password, mysql_data.databases, mysql_data.Port) == 1)
+			{//连接成功
+				base_flag = 1;
+				SetTimer(24, 60000, NULL);//用于查询数据
+				SetDlgItemText(IDC_M_Database_Status, _T("已连接"));
 
+				m_nid.dwInfoFlags = NIIF_INFO;
+				wcscpy_s(m_nid.szInfoTitle, _T("提示")); //给nid赋值
+				wcscpy_s(m_nid.szInfo, _T("数据库连接成功！"));// 复制
+				Shell_NotifyIcon(NIM_MODIFY, &m_nid);
+
+				bool a;
+				a = mysql_data.QueryDatabase2(mysql_data.time_table, mysql_data.day,
+					mysql_data.time_end, mysql_data.time_ipid, mysql_data.time_userid,
+					mysql_data.ip_table, mysql_data.ip_id, mysql_data.ip_ip,
+					mysql_data.user_table, mysql_data.user_id, mysql_data.user_name);
+				if (a == 1)
+					//显示查询到多少个到期用户
+				{
+					CString str;
+					str.Format(_T("%d"), user_num);
+					SetDlgItemText(IDC_M_Database_num, LPCTSTR(str));
+					//弹窗显示
+				}
+				else//查询失败
+				{
+					SetDlgItemText(IDC_M_Database_num, LPCTSTR(_T("查询异常!")));
+
+				}
+
+				mysql_close(&mysql);	 //关闭一个服务器连接。
+			}
+			else {//连接失败
+			/*	TCHAR Name[100];	//定义TCHAR临时变量，
+				//拼接内容
+				MultiByteToWideChar(CP_ACP, 0, mysql_error(&mysql), -1, Name, 100);//转换格式
+				DisplayResourceNAMessageBox(_T("连接数据库失败"), Name);*/
+				base_flag = 0;
+				SetDlgItemText(IDC_M_Database_Status, _T("连接失败"));
+				SetDlgItemText(IDC_M_Database_num, LPCTSTR(_T("连接失败")));
+				m_nid.dwInfoFlags = NIIF_ERROR;
+				wcscpy_s(m_nid.szInfoTitle, _T("警告")); //给nid赋值
+				wcscpy_s(m_nid.szInfo, _T("数据库连接失败！"));// 复制
+				Shell_NotifyIcon(NIM_MODIFY, &m_nid);
+			}
+		}
+	}
+		
 	CDialogEx::OnTimer(nIDEvent);
 }
 
