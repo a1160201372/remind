@@ -62,6 +62,7 @@ BOOL CemindDlg::OnInitDialog()
 	
 	//初始化定时器
 	SetTimer(1, 60000, NULL);//一个5秒触发一次,用于检测数据库。
+	SetTimer(24, 60000, NULL);//一个5秒触发一次,用于检测数据库。
 	SetTimer(25, 3000, NULL);//。
 	//设置菜单项
 	m_Menu.LoadMenu(IDR_MENU1);  //  IDR_MENU1
@@ -243,8 +244,8 @@ void CemindDlg::OnTimer(UINT_PTR nIDEvent)
 					Shell_NotifyIcon(NIM_MODIFY, &m_nid);
 				}
 			}
-			SetTimer(1, 60001, NULL);//用于查询数据
-			break;*/
+			SetTimer(1, 60001, NULL);//用于查询数据*/
+			break;
 		}
 		case 24: ///执行查询
 		{
@@ -256,7 +257,7 @@ void CemindDlg::OnTimer(UINT_PTR nIDEvent)
 			char* table1 = ConvertLPWSTRToLPSTR(mysql_data.interval_time);
 
 			int flag_tmp = atoi(table1);
-			if (flag_spacing > flag_tmp)
+			if (flag_spacing > (flag_tmp-2))
 			{
 				flag_spacing = 0;
 				if (mysql_data.ConnectDatabase(mysql_data.HostName, mysql_data.UserName, mysql_data.password, mysql_data.databases, mysql_data.Port) == 1)
